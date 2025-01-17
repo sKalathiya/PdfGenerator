@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'sqlite'),
+    'default' => env('DB_CONNECTION', 'mongodb'),
 
     /*
     |--------------------------------------------------------------------------
@@ -41,6 +41,12 @@ return [
             'journal_mode' => null,
             'synchronous' => null,
         ],
+
+        'mongodb' => [
+                'driver' => 'mongodb',
+                'dsn' => env('DB_URI'),
+                'database' => 'pdfDB',
+            ],
 
         'mysql' => [
             'driver' => 'mysql',
