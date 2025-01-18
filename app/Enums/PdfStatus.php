@@ -4,11 +4,11 @@ namespace App\Enums;
 
 enum PdfStatus
 {
+    case PENDING;
     case GENERATING;
-    case COMPLETED;
+    case SUCCESS;
 
     case FAILED ;
 
-    case CANCELLED ;
 
 }

@@ -35,12 +35,14 @@ return [
         ],
 
         'database' => [
-            'driver' => 'database',
-            'connection' => env('DB_QUEUE_CONNECTION'),
-            'table' => env('DB_QUEUE_TABLE', 'jobs'),
-            'queue' => env('DB_QUEUE', 'default'),
-            'retry_after' => (int) env('DB_QUEUE_RETRY_AFTER', 90),
-            'after_commit' => false,
+            'driver' => 'mongodb',
+            // You can also specify your jobs-specific database
+            // in the config/database.php file
+            'connection' => 'mongodb',
+            'table' => 'jobs',
+            'queue' => 'default',
+            // Optional setting
+            // 'retry_after' => 60,
         ],
 
         'beanstalkd' => [
@@ -86,7 +88,8 @@ return [
     */
 
     'batching' => [
-        'database' => env('DB_CONNECTION', 'sqlite'),
+        'driver' => 'mongodb',
+        'database' => 'mongodb',
         'table' => 'job_batches',
     ],
 
@@ -102,10 +105,9 @@ return [
     | Supported drivers: "database-uuids", "dynamodb", "file", "null"
     |
     */
-
     'failed' => [
-        'driver' => env('QUEUE_FAILED_DRIVER', 'database-uuids'),
-        'database' => env('DB_CONNECTION', 'sqlite'),
+        'driver' => 'mongodb',
+        'database' => 'mongodb',
         'table' => 'failed_jobs',
     ],
 

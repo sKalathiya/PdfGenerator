@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\PdfStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,8 +15,9 @@ return new class extends Migration
         Schema::create('pdfs', function (Blueprint $table) {
             $table->id();
             $table->string("user_id");
-            $table->enum("status" , \App\Enums\PdfStatus::cases() );
+            $table->enum("status" , PdfStatus::cases() )->default(PdfStatus::PENDING->name);
             $table->string("url")->nullable();
+            $table->string('error_message')->nullable();
             $table->timestamps();
         });
     }
