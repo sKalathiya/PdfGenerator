@@ -22,7 +22,7 @@ class GeneratePdf implements ShouldQueue
      *
      * @var int
      */
-    public int $tries = 3;
+    public int $tries = 2;
 
     /**
      * The pdf instance passed to job.
@@ -52,7 +52,7 @@ class GeneratePdf implements ShouldQueue
     {
         try {
             // Step 1: Update status to 'GENERATING'
-            PdfService::changeStatus($this->pdf , PdfStatus::GENERATING->name);
+            PdfService::changeStatus($this->pdf , PdfStatus::GENERATING);
 
             // Fetch data from API
             $data = Http::get("https://api.websiteranking.ai/api/sites/insightsByUrl/?url=https://youtube.com")->json();
@@ -76,7 +76,7 @@ class GeneratePdf implements ShouldQueue
             }
 
             // Step 4: Update status to 'SUCCESS'
-            PdfService::changeStatus($this->pdf , PdfStatus::SUCCESS->name, $this->generateAzureUrl($this->pdf->id));
+            PdfService::changeStatus($this->pdf , PdfStatus::SUCCESS, $this->generateAzureUrl($this->pdf->id));
         } catch (Exception $e) {
             // Global error handling (for unexpected errors)
             PdfService::setErrorMsg($this->pdf, "Unexpected error: " . $e->getMessage());
@@ -104,6 +104,6 @@ class GeneratePdf implements ShouldQueue
      */
     public function failed(?Throwable $exception): void
     {
-        PdfService::changeStatus($this->pdf , PdfStatus::FAILED->name);
+        PdfService::changeStatus($this->pdf , PdfStatus::FAILED);
     }
 }

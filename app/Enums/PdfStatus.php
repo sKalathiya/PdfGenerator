@@ -1,14 +1,14 @@
 <?php
 
 namespace App\Enums;
+use Illuminate\Contracts\Support\Arrayable;
 
-enum PdfStatus
+enum PdfStatus : string
 {
-    case PENDING;
-    case GENERATING;
-    case SUCCESS;
-
-    case FAILED ;
+    case PENDING = "pending";
+    case GENERATING = "generating";
+    case SUCCESS = "success";
+    case FAILED = "failed";
 
 
 }

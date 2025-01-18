@@ -17,8 +17,9 @@ class PdfService
      * @param string $userId
      * @return Pdf
      */
-    public static function createPdfRequest(string $userId): Pdf{
-        return Pdf::create(["user_id" => $userId]);
+    public static function createPdfRequest(string $userId): Pdf
+    {
+        return Pdf::create(["user_id" => $userId , "status" => PdfStatus::PENDING]);
     }
 
 
@@ -38,13 +39,13 @@ class PdfService
      * Changes the status of the Pdf and if Success, adds the public URL.
      *
      * @param Pdf $pdf
-     * @param string $pdfStatus
+     * @param PdfStatus $pdfStatus
      * @param string|null $url
      * @return void
      */
-    public static function changeStatus (Pdf $pdf ,string $pdfStatus , string $url = null):void{
+    public static function changeStatus (Pdf $pdf ,PdfStatus $pdfStatus , string $url = null):void{
         $pdf->status = $pdfStatus;
-        if ( $pdfStatus === PdfStatus::SUCCESS->name) {
+        if ( $pdfStatus === PdfStatus::SUCCESS) {
             $pdf->url = $url;
         }
         $pdf->save();
