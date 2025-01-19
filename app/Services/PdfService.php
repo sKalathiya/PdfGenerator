@@ -26,12 +26,12 @@ class PdfService
     /**
      * Gets the status of the Pdf as Json resource.
      *
-     * @param Pdf $pdf
-     * @return PdfResource
+     * @param string $id
+     * @return Pdf
      */
-    public static function getStatus(Pdf $pdf): PdfResource
+    public static function getStatus(string $id): Pdf
     {
-        return new PdfResource($pdf);
+        return Pdf::where(["id" => $id])->firstOrFail();
     }
 
 

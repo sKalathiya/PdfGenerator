@@ -22,13 +22,10 @@ class PdfController extends Controller
      */
     public function accessPdf(Pdf $pdf)
     {
-        //Return the PdfResource based on the request ID
-        $pdf =  PdfService::getStatus($pdf);
-
         return match ($pdf->status) {
-            PdfStatus::FAILED => \response($pdf, 500),
-            PdfStatus::SUCCESS => \response($pdf),
-            default => \response($pdf, 202),
+            PdfStatus::FAILED => \response(new PdfResource($pdf), 500),
+            PdfStatus::SUCCESS => \response(new PdfResource($pdf)),
+            default => \response(new PdfResource($pdf), 202),
         };
     }
 
@@ -42,14 +39,17 @@ class PdfController extends Controller
      */
     public function generatePdf(Request $request)
     {
-        //Create Pdf resource of the Pdf request
-        $pdf =  PdfService::createPdfRequest("1");
+        //userId
+        $userId = $request->user()?->id || "1";
+
+        //Create Pdf instance of the Pdf request
+        $pdf =  PdfService::createPdfRequest($userId);
 
         //Dispatch the request ot GeneratePdf job
         GeneratePdf::dispatch($pdf);
 
-        //Return the PdfResource
-        return \response(new PdfResource($pdf) , 202);
+
+        return response(new PdfResource($pdf), 202);
     }
 
 }

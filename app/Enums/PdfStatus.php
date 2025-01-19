@@ -3,6 +3,7 @@
 namespace App\Enums;
 use Illuminate\Contracts\Support\Arrayable;
 
+
 enum PdfStatus : string
 {
     case PENDING = "pending";

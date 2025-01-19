@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('pdfs', function (Blueprint $table) {
             $table->id();
             $table->string("user_id");
-            $table->enum("status" , PdfStatus::cases());
+            $table->enum("status" , [PdfStatus::SUCCESS->value , PdfStatus::FAILED->value , PdfStatus::GENERATING->value, PdfStatus::PENDING->value]);
             $table->string("url")->nullable();
             $table->string('error_message')->nullable();
             $table->timestamps();

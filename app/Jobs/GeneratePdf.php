@@ -8,7 +8,7 @@ use App\Services\PdfService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Http;
-use Barryvdh\DomPDF\Facade\Pdf as PdfLoader;
+use Spatie\LaravelPdf\Facades\Pdf as PdfLoader;
 use Illuminate\Support\Facades\Storage;
 use Exception;
 use Throwable;
@@ -58,24 +58,17 @@ class GeneratePdf implements ShouldQueue
             $data = Http::get("https://api.websiteranking.ai/api/sites/insightsByUrl/?url=https://youtube.com")->json();
 
             try {
-                // Step 2: Generate PDF
-                $pdfFile = PdfLoader::loadView('welcome',  $data)->output();
+                // Step 2: Generate and store PDF
+               PdfLoader::view('pdf',   ["data" => $data["data"]])
+                   ->disk("azure")
+                   ->save($this->pdf->id . ".pdf");
             } catch (Exception $e) {
                 // Handle PDF generation errors
                 PdfService::setErrorMsg($this->pdf,  "Error generating PDF: " . $e->getMessage());
                 throw $e; // Stop further execution
             }
 
-            try {
-                // Step 3: Upload PDF to Azure Storage
-                Storage::disk("azure")->put($this->pdf->id . ".pdf", $pdfFile);
-            } catch (Exception $e) {
-                // Handle storage upload errors
-                PdfService::setErrorMsg($this->pdf,  "Error uploading PDF to storage: " . $e->getMessage());
-                throw $e; // Stop further execution
-            }
-
-            // Step 4: Update status to 'SUCCESS'
+            // Step 3: Update status to 'SUCCESS'
             PdfService::changeStatus($this->pdf , PdfStatus::SUCCESS, $this->generateAzureUrl($this->pdf->id));
         } catch (Exception $e) {
             // Global error handling (for unexpected errors)

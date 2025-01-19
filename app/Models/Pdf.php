@@ -8,7 +8,7 @@ use MongoDB\Laravel\Eloquent\Model;
 
 class Pdf extends Model
 {
-    protected $fillable = ["status" , "url" , "user_id"];
+    protected $fillable = ["status" , "url" , "user_id" , "error_message"];
 
 
     /**
